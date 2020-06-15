@@ -1,0 +1,177 @@
+{
+	"_comment0": "This section establishes the inital metadata for the plugin. Here you set the name of the plugin, the version number, what programing language you use, the name that will appear on the technologies page, the source file of the plugin, what packages are required to be in the python file, and how the plugin is activated.",
+	"name": "custom.remote.python.NetScoutApi",
+	"version": "1.003",
+	"type": "python",
+	"entity": "CUSTOM_DEVICE",
+	"metricGroup": "tech.NetScout",
+	"processTypeNames": ["PYTHON"],
+	"technologies": ["NetScout"],
+	"source":
+	{
+		"package": "netscout_api_plugin",
+		"className": "netScoutPlugin",
+		"install_requires":
+		[
+			"requests",
+			"os",
+			"logging",
+			"json",
+			"re"
+		],
+		"activation": "Remote"
+	},
+	"_comment1": "The metrics section is the name and type of the custom metric, this is the base information of the metric and is used by the timerseries API to represent the custom metric in dynatrace. ",
+	"metrics":
+	[
+		{
+			"timeseries":
+			{
+				"key": "avgNetworkIn",
+				"unit": "Count",
+				"aggregation": "avg",
+				"displayname": "Average Network In"
+			},
+			"entity": "CUSTOM_DEVICE"
+		},
+		{
+			"timeseries":
+			{
+				"key": "avgNetworkOut",
+				"unit": "Count",
+				"aggregation": "avg",
+				"displayname": "Average Network Out"
+			},
+			"entity": "CUSTOM_DEVICE"
+		}
+	],
+	"_comment4":"UI Sets the technology group metrics and the individual metrics for a page. This is what is show when you click on the plugins technology page",
+	"ui":
+	{
+		"keymetrics":
+		[
+			{
+				"key": "avgNetworkIn",
+				"aggregation": "avg",
+				"mergeaggregation": "sum",
+				"displayname": "Average Network In"
+			},
+			{
+				"key": "avgNetworkOut",
+				"aggregation": "avg",
+				"mergeaggregation": "sum",
+				"displayname": "Average Network Out"
+			}
+		],
+		"_comment5":"Chart that will show up in process page",
+		"keycharts":
+		[
+			{
+				"group": "Interface",
+				"title": "Network In/Out",
+				"description": "Average Network in and out for a Netscout Interface",
+				"series": [
+					{
+						"key": "avgNetworkIn",
+						"displayname": "Bytes",
+						"aggregation": "avg",
+						"mergeaggregation": "sum",
+						"color": "#ff3333",
+						"seriestype": "bar",
+						"unit": "Count"
+					},
+					{
+						"key": "avgNetworkOut",
+						"displayname": "Avg Network Out",
+						"aggregation": "avg",
+						"mergeaggregation": "sum",
+						"color": "#74cff7",
+						"seriestype": "bar",
+						"unit": "Count"
+					}
+				]
+			}
+		],
+		"_comment6":"Chart that will show up in more details page",
+		"charts":
+		[
+			{
+				"group": "NetScout Interface",
+				"title": "Avg Network In/Out",
+				"description": "Total number of print queue bytes",
+				"series": [
+					{
+						"key": "avgNetworkIn",
+						"displayname": "Bytes",
+						"aggregation": "avg",
+						"mergeaggregation": "sum",
+						"color": "#ff3333",
+						"seriestype": "bar",
+						"unit": "Count"
+					},
+					{
+						"key": "avgNetworkOut",
+						"displayname": "Avg Network Out",
+						"aggregation": "avg",
+						"mergeaggregation": "sum",
+						"color": "#74cff7",
+						"seriestype": "bar",
+						"unit": "Count"
+					}
+				]
+			}
+		]
+	},
+	"_comment7":"This section creates the keys and type for values assigned when setting up an endpoint for the plugin. They can and should be used as global variables in the python file(This is done in the initialize function under the format self.{Key} = self.config.get({key}, 'default value').",
+	"properties":
+	[
+    {
+      "key": "hostname",
+      "type": "String"
+    },
+    {
+      "key": "user",
+      "type": "String"
+    },
+    {
+      "key": "password",
+      "type": "password"
+    },
+    {
+      "key": "type",
+      "type": "DropDown",
+			"dropdownValues": ["Interface","Radio"]
+    }
+  ],
+	"_comment8":"Sets the order in which the properties above appear on the page and any text that appears under them. Good rule of thumb is two endpoint inputs per row. Key should be the same as the properties section",
+	"configUI":
+	{
+		"displayName": "NetScout Plugin",
+		"properties":
+		[
+			{
+		    "key": "hostname",
+		    "displayName": "Host Name",
+		    "displayOrder": 1,
+				"displayHint": "IP Address or hostname of Netscout server"
+			},
+			{
+		    "key": "user",
+		    "displayName": "Username",
+		    "displayOrder": 2,
+				"displayHint": "NetScout Username"
+			},
+			{
+		    "key": "password",
+		    "displayName": "Password",
+		    "displayOrder": 3
+			},
+			{
+		    "key": "type",
+		    "displayName": "Device Type",
+		    "displayHint": "Mark as false if localhost",
+		    "displayOrder": 4
+			}
+		]
+	}
+}
